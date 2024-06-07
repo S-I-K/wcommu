@@ -1,0 +1,418 @@
+/*!
+ * fullPage 2.9.6
+ * https://github.com/alvarotrigo/fullPage.js
+ * MIT licensed
+ *
+ * Copyright (C) 2013 alvarotrigo.com - A project by Alvaro Trigo
+ */
+html.fp-enabled,
+.fp-enabled body {
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+
+    /*Avoid flicker on slides transitions for mobile phones #336 */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.fp-section {
+    position: relative;
+    -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
+    -moz-box-sizing: border-box; /* <=28 */
+    box-sizing: border-box;
+}
+.fp-slide {
+    float: left;
+}
+.fp-slide, .fp-slidesContainer {
+    height: 100%;
+    display: block;
+}
+.fp-slides {
+    z-index:1;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
+    transition: all 0.3s ease-out;
+}
+.fp-section.fp-table, .fp-slide.fp-table {
+    display: table;
+    table-layout:fixed;
+    width: 100%;
+}
+.fp-tableCell {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+}
+.fp-slidesContainer {
+    float: left;
+    position: relative;
+}
+.fp-controlArrow {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    margin-top: -38px;
+    -webkit-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+.fp-controlArrow.fp-prev {
+    left: 15px;
+    width: 0;
+    border-width: 38.5px 34px 38.5px 0;
+    border-color: transparent #fff transparent transparent;
+}
+.fp-controlArrow.fp-next {
+    right: 15px;
+    border-width: 38.5px 0 38.5px 34px;
+    border-color: transparent transparent transparent #fff;
+}
+.fp-scrollable {
+    overflow: hidden;
+    position: relative;
+}
+.fp-scroller{
+    overflow: hidden;
+    /* height: 100%; */
+}
+.iScrollIndicator{
+    border: 0 !important;
+}
+.fp-notransition {
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+#fp-nav {
+    position: fixed;
+    z-index: 100;
+    margin-top: -140px !important;
+    top: 50%;
+    opacity: 1;
+    -webkit-transform: translate3d(0,0,0);
+}
+
+#fp-nav.right {
+    right: 83px;
+}
+#fp-nav.left {
+    left: 17px;
+}
+.fp-slidesNav{
+    position: absolute;
+    z-index: 4;
+    opacity: 1;
+    -webkit-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    left: 0 !important;
+    right: 0;
+    margin: 0 auto !important;
+}
+.fp-slidesNav.bottom {
+    bottom: 17px;
+}
+.fp-slidesNav.top {
+    top: 17px;
+}
+#fp-nav ul,
+.fp-slidesNav ul {
+  margin: 0;
+  padding: 0;
+}
+#fp-nav ul li,
+.fp-slidesNav ul li {
+    display: block; text-align:center;
+    position:relative;
+}
+.fp-slidesNav ul li {
+    display: inline-block; margin-bottom:37px;
+}
+#fp-nav ul li {
+	 margin-bottom: 117px;
+	}
+#fp-nav ul li:last-child {margin-bottom:0;}
+
+#fp-nav ul li:last-child:after {display:none;}
+#fp-nav ul li a,
+.fp-slidesNav ul li a {
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+}
+#fp-nav ul li a.active span{
+    background: #231FFF;
+    border: 1px solid #231FFF;
+}
+/* #fp-nav ul li a.active span:after {
+	content:""; display:inline-block; position:absolute; top:50%; left:50%;
+	height: 65px; width: 65px; border:0; transform:translate(-50%, -50%);
+    border-radius: 100%; background:#004ea2; transition:all 0.4s;
+	} */
+
+#fp-nav ul li a span,
+.fp-slidesNav ul li a span {
+    display:inline-block; position:relative;
+	border-radius: 50%;
+    z-index: 1;
+    height: 15px;
+    width: 15px; background:none;
+    border: 1px solid #ffffff;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+body.fp-viewing-2 #fp-nav ul li a span {
+    border: 1px solid #000;
+}
+body.fp-viewing-2 #fp-nav ul li a.active span {
+    border: 1px solid #231FFF;
+}
+
+#fp-nav ul li .fp-tooltip {
+    position: absolute;
+    top: 50%; transform:translateY(-50%);
+    color: #fff; font-family:"Montserrat";
+    font-size: 13px; letter-spacing:-0.25px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    opacity: 0;
+    cursor: pointer;
+}
+#fp-nav ul li .fp-tooltip::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    /* border: 1px solid orange; */
+    margin-right: 8px;
+    background: url(../../mobile/img/nav_ico01.png) no-repeat center center / 100%;
+}
+#fp-nav ul li:nth-child(2) .fp-tooltip::before {
+    background: url(../../mobile/img/nav_ico02.png) no-repeat center center / 100%;
+}
+#fp-nav ul li:nth-child(3) .fp-tooltip::before {
+    background: url(../../mobile/img/nav_ico03.png) no-repeat center center / 100%;
+}
+#fp-nav ul li:nth-child(4) .fp-tooltip::before {
+    background: url(../../mobile/img/nav_ico04.png) no-repeat center center / 100%;
+}
+#fp-nav ul li:hover .fp-tooltip,
+#fp-nav.fp-show-active a.active + .fp-tooltip {
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in;
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    font-family: var(--en-font);
+    font-size: 14px;
+    line-height: 17.07px;
+    font-weight: 500;
+    background: rgba(35, 31, 255, 0.7);
+    border-radius: 42.5px;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#fp-nav ul li .fp-tooltip.right {
+    right: 50px;
+}
+#fp-nav ul li .fp-tooltip.left {
+    left: 20px;
+}
+.fp-auto-height.fp-section,
+.fp-auto-height .fp-slide,
+.fp-auto-height .fp-tableCell{
+    height: auto !important;
+}
+
+.fp-responsive .fp-auto-height-responsive.fp-section,
+.fp-responsive .fp-auto-height-responsive .fp-slide,
+.fp-responsive .fp-auto-height-responsive .fp-tableCell {
+    height: auto !important;
+}
+
+/* css variable */
+:root {
+    --kr-font: 'Pretendard-Regular';
+    --en-font: 'Montserrat', sans-serif;
+}
+/* section1 */
+.section1 {
+    /* background: rebeccapurple; */
+}
+.section1 .main_visual {}
+.section1 .main_visual .main_slide{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.section1 .main_visual .main_slide .bg-area{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.section1 .main_visual .main_slide .bg-area img,
+.section1 .main_visual .main_slide .bg-area video{
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: absolute;
+}
+.section1 .main_visual .main_slide .bg-area video{
+    z-index: -1;
+}
+.section1 .main_visual .main_slide .text-area{
+    /* border: 1px solid orange; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+.section1 .main_visual .main_slide .text-area li{
+    font-family: var(--kr-font);
+    font-weight: 400;
+    font-size: 60px;
+    line-height: 71.6px;
+    color: rgba(255, 255, 255, 0.7);
+    height: auto;
+    min-height: auto;
+}
+.section1 .main_visual .main_slide .text-area li span.highlight{
+    font-weight: 900;
+    color: #fff;
+}
+.section1 .main_visual .main_slide .text-area li span.highlight.underline{
+    position: relative;
+    z-index: 1;
+}
+.section1 .main_visual .main_slide .text-area li span.highlight.underline::before{
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 52px;
+    background: #231fff;
+    z-index: -1;
+}
+.section1 .main_visual .main_slide .text-area li:not(:last-child){
+    margin-bottom: 8px;
+}
+.section1 .main_visual .main_slide .comment{
+    font-family: var(--kr-font);
+    font-size: 24px;
+    color: #fff;
+    line-height: 28.64px;
+    margin-bottom: 64px;
+}
+.section1 .main_visual .main_slide a.portfolio-btn{
+    display: block;
+    font-family: var(--en-font);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29.26px;
+    color: #fff;
+    padding: 26px 76px;
+    background: rgba(35, 31, 255, .5);
+    border-radius: 40px;
+    transition: all .4s;
+    box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, 0.6);
+}
+.section1 .main_visual .main_slide a.portfolio-btn:hover{
+    background: rgba(35, 31, 255, .7);
+}
+.section .arrow-area {
+    cursor: pointer;
+    position: absolute;
+    bottom: 183px;
+    padding: 20px;
+    /* border: 1px solid orange; */
+    animation: arrow-action 1s ease-in-out infinite alternate;
+    transition: all .4s; 
+    z-index: 999;
+}
+.section .arrow-area img{
+    width: 24px;
+    height: 24px;
+}
+.section .arrow-area-up {
+    cursor: pointer;
+    position: absolute;
+    top: 183px;
+    padding: 20px;
+    /* border: 1px solid orange; */
+    animation: arrow-action-up 1s ease-in-out infinite alternate;
+    transform: rotate(180deg);
+    transition: all .4s; 
+    z-index: 999;
+}
+.section .arrow-area-up img{
+    width: 24px;
+    height: 24px;
+}
+.section .arrow-area img{
+    width: 100%;
+}
+@keyframes arrow-action {
+    0% {
+        bottom: 90px;
+    }
+    100% {
+        bottom: 70px;
+    }
+}
+@keyframes arrow-action-up {
+    0% {
+        top: 90px;
+    }
+    100% {
+        top: 70px;
+    }
+}
+.section .main_visual .main_slide .arrow-area:hover {
+    /* animation: none; */
+}
+
+#fp-nav ul li:not(:last-child) a::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 121px;
+    background: #d9d9d9;
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+body.fp-viewing-2 #fp-nav ul li:not(:last-child) a::after {
+    background: #000;
+}
+#fp-nav ul li:nth-child(4) a::after {
+    display: none;
+}
